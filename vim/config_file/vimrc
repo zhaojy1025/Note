@@ -1,0 +1,199 @@
+" Configuration file for vim
+set modelines=0		" CVE-2007-2438
+set nocompatible	" Use Vim defaults instead of 100% vi compatibility
+set backspace=2		" more powerful backspacing
+
+set nowritebackup nobackup
+
+" 高亮文本
+syntax enable
+
+" 不要备份文件（根据自己需要取舍）
+set nobackup
+
+" 不要生成swap文件，当buffer被丢弃的时候隐藏它
+set noswapfile
+set bufhidden=hide
+
+" 边输入边搜索
+set incsearch
+
+set hlsearch
+
+" 显示行数
+set nu!
+
+" 设置光标行
+set cursorline
+
+" 主题
+set background=dark
+colorschem solarized
+
+" 当文件在外部改动时自动加载
+set autoread
+
+" 搜索不区分大小写
+set ignorecase
+
+" 保持缩进
+set autoindent
+
+" 缩放4空格
+set ts=4
+set smartindent  
+set tabstop=4  
+set shiftwidth=4  
+set expandtab  
+set softtabstop=4 
+
+set t_Co=256
+
+" 允许从vim粘贴内容至外部
+vmap <C-x> :!pbcopy<CR>
+vmap <C-c> "+y
+vmap <C-v> "+p
+
+nmap <leader><Space><Space> :%s/\s\+$//<cr>
+
+" 设置一些快捷键
+noremap qq ^
+noremap ee $
+
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+" filetype plugin on
+
+" ==============================================================================
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+
+" ==============================================================================
+" 安装的所有插件
+call vundle#begin()
+
+" 必须安装，let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" 文件目录
+Plugin  'scrooloose/nerdtree'
+
+" 快速查找
+Plugin 'kien/ctrlp.vim'
+
+" 快速注释
+Plugin 'scrooloose/nerdcommenter'
+
+Plugin 'EasyGrep'
+
+Plugin 'posva/vim-vue'
+
+Plugin 'altercation/vim-colors-solarized'
+
+Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'vim-airline/vim-airline'
+
+Plugin 'vim-airline/vim-airline-themes'
+
+Plugin 'tpope/vim-fugitive'
+
+Plugin 'jiangmiao/auto-pairs'
+
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+
+call vundle#end()            " required
+
+" ==============================================================================
+" vundle命令
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+
+" NERDTree 设置
+let NERDTreeWinPos='left'
+let g:NERDTRreeMouseMode = 1
+nnoremap <F2> :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" 自动打开NERDtree
+autocmd vimEnter * NERDTree
+" 打开新的buffer时自动定位到编辑窗口
+autocmd VimEnter * wincmd p
+
+" ctrlp 设置
+" <leader>p搜索当前目录下文件
+let g:ctrlp_map = '<leader>p'
+let g:ctrlp_cmd = 'CtrlP'
+" <leader>f搜索MRU（Most Recently Used）文件
+nmap <leader>f :CtrlPMRUFiles<CR>
+" <leader>b显示缓冲区文件，并可通过序号进行跳转
+nmap <Leader>b :CtrlPBuffer<CR>
+" 设置搜索时忽略的文件
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
+\ }
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_match_window_bottom = 1
+" 修改QuickFix窗口显示的最大条目数
+let g:ctrlp_max_height = 15
+let g:ctrlp_match_window_reversed = 0
+" 设置MRU最大条目数为500
+let g:ctrlp_mruf_max = 500
+let g:ctrlp_follow_symlinks = 1
+" 默认不使用正则表达式，置1改为默认使用正则表达式，可以用<C-r>进行切换
+let g:ctrlp_regexp = 0
+" 自定义搜索列表的提示符
+let g:ctrlp_line_prefix = '♪ '
+
+" nerdcommenter 设置
+let g:NERDSpaceDelims=1
+
+" vue代码高亮设置
+au BufRead,BufNewFile *.vue set filetype=vue
+
+" YCM
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_min_num_identifier_candidate_chars = 0
+let g:ycm_use_ultisnips_completer = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_complete_in_strings = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_semantic_triggers =  {
+  \   'css,less,sass,scss' : ['-', 're!:\s*']
+  \ }
+nnoremap <leader>w :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>wr :YcmCompleter GoToReferences<CR>
+nnoremap <leader>wd :YcmCompleter GetDoc<CR>
+
+" vim-airline
+let g:airline_theme="luna"
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#branch#enabled=1
+let g:airline#extensions#tabline#show_close_button = 1
+let g:airline#extensions#tabline#close_symbol = 'X'
+
+"设置切换Buffer快捷键"
+nnoremap <C-N> :bn<CR>
+nnoremap <C-P> :bp<CR>
+
+" EasyGrep
+let g:EasyGrepMode = 0     " All:0, Open Buffers:1, TrackExt:2,
+let g:EasyGrepCommand = 1  " Use vimgrep:0, grepprg:1
+let g:EasyGrepRecursive  = 1 " Recursive searching
+let g:EasyGrepIgnoreCase = 1 " not ignorecase:0
+let g:EasyGrepFilesToExclude = "*.bak, *~, cscope.*, *.a, *.o, *.pyc, *.bak, **/node_modules/**" 
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files.
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " Ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
+
