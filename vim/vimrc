@@ -3,21 +3,19 @@ set modelines=0		" CVE-2007-2438
 set nocompatible	" Use Vim defaults instead of 100% vi compatibility
 set backspace=2		" more powerful backspacing
 
+" 关闭自动备份，通常没什么用，且非常烦人
 set nowritebackup nobackup
-
-" 高亮文本
-syntax enable
-
-" 不要备份文件（根据自己需要取舍）
-set nobackup
 
 " 不要生成swap文件，当buffer被丢弃的时候隐藏它
 set noswapfile
 set bufhidden=hide
 
+" 高亮文本
+syntax enable
+
 " 边输入边搜索
 set incsearch
-
+" 高亮搜索内容
 set hlsearch
 
 " 显示行数
@@ -41,22 +39,27 @@ set autoindent
 
 " 缩放4空格
 set ts=4
-set smartindent  
-set tabstop=4  
-set shiftwidth=4  
-set expandtab  
-set softtabstop=4 
+" 开启智能缩进
+set smartindent
+" 一个tab4个字符
+set tabstop=4
+set shiftwidth=4
+" 用空格代替tab
+set expandtab
+" 按一次tab前进4个字符
+set softtabstop=4
 
 set t_Co=256
 
-" 允许从vim粘贴内容至外部
+" 允许从vim粘贴内容至外部, 需要确认vim版本是否支持clipboard
 vmap <C-x> :!pbcopy<CR>
 vmap <C-c> "+y
 vmap <C-v> "+p
 
+" 去除行尾多余空格快键键
 nmap <leader><Space><Space> :%s/\s\+$//<cr>
 
-" 设置一些快捷键
+" 设置一些快捷键,快速回到第一个字符和最后一个字符
 noremap qq ^
 noremap ee $
 
@@ -187,7 +190,7 @@ let g:EasyGrepMode = 0     " All:0, Open Buffers:1, TrackExt:2,
 let g:EasyGrepCommand = 1  " Use vimgrep:0, grepprg:1
 let g:EasyGrepRecursive  = 1 " Recursive searching
 let g:EasyGrepIgnoreCase = 1 " not ignorecase:0
-let g:EasyGrepFilesToExclude = "*.bak, *~, cscope.*, *.a, *.o, *.pyc, *.bak, **/node_modules/**" 
+let g:EasyGrepFilesToExclude = "*.bak, *~, cscope.*, *.a, *.o, *.pyc, *.bak, **/node_modules/**"
 if executable('ag')
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
