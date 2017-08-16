@@ -21,6 +21,9 @@ set hlsearch
 " 显示行数
 set nu!
 
+" 保存50条指令历史
+set history=50
+
 " 设置光标行
 set cursorline
 
@@ -78,31 +81,40 @@ call vundle#begin()
 " 必须安装，let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" 文件目录
+" 文件目录,可方便查看目录结构，访问相关文件
 Plugin  'scrooloose/nerdtree'
 
-" 快速查找
+" 快速查找,类似于sublime的快速查找文件
 Plugin 'kien/ctrlp.vim'
 
-" 快速注释
+" 快速注释,通过快捷键进行注释
 Plugin 'scrooloose/nerdcommenter'
 
+" 在项目中查询特定内容
 Plugin 'EasyGrep'
 
+" 高亮vue文件
 Plugin 'posva/vim-vue'
 
+" solarized主题
 Plugin 'altercation/vim-colors-solarized'
 
+" 代码补全，安装较为麻烦，但功能强大
 Plugin 'Valloric/YouCompleteMe'
 
+" vim的状态tab栏
 Plugin 'vim-airline/vim-airline'
 
+" vim状态栏主题
 Plugin 'vim-airline/vim-airline-themes'
 
+" 处理git信息插件,解决冲突时好用
 Plugin 'tpope/vim-fugitive'
 
+" 自动补全括号、引号、双引号等内容
 Plugin 'jiangmiao/auto-pairs'
 
+" 目录展示git状态插件,改动更加直观
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 call vundle#end()            " required
@@ -115,9 +127,14 @@ call vundle#end()            " required
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 
 " NERDTree 设置
+" =============================================================================
+" 默认位置
 let NERDTreeWinPos='left'
+" 鼠标模式,感觉没比要用鼠标...
 let g:NERDTRreeMouseMode = 1
+" 通过<F2>控制显隐
 nnoremap <F2> :NERDTreeToggle<CR>
+" 当仅剩nerdtree时，关闭vim编辑器
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " 自动打开NERDtree
 autocmd vimEnter * NERDTree
@@ -125,60 +142,84 @@ autocmd vimEnter * NERDTree
 autocmd VimEnter * wincmd p
 
 " ctrlp 设置
-" <leader>p搜索当前目录下文件
+" =============================================================================
+" 通过快捷键<leader>(也就是\键)p搜索当前目录下文件
 let g:ctrlp_map = '<leader>p'
 let g:ctrlp_cmd = 'CtrlP'
 " <leader>f搜索MRU（Most Recently Used）文件
 nmap <leader>f :CtrlPMRUFiles<CR>
-" <leader>b显示缓冲区文件，并可通过序号进行跳转
+" <leader>b显示缓冲区文件，并可通过序号进行跳转,目前很少用到，后续再研究一下
 nmap <Leader>b :CtrlPBuffer<CR>
 " 设置搜索时忽略的文件
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm|node_modules)$',
     \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
 \ }
+" 设定ctrlp搜索路径模式,ra代表包括当前目录与最近的具备特定文件的父目录
 let g:ctrlp_working_path_mode = 'ra'
+" 搜索结果默认显示位置
 let g:ctrlp_match_window_bottom = 1
+let g:ctrlp_match_window_reversed = 0
 " 修改QuickFix窗口显示的最大条目数
 let g:ctrlp_max_height = 15
-let g:ctrlp_match_window_reversed = 0
 " 设置MRU最大条目数为500
 let g:ctrlp_mruf_max = 500
+" 设置是否跟踪符号链接
 let g:ctrlp_follow_symlinks = 1
 " 默认不使用正则表达式，置1改为默认使用正则表达式，可以用<C-r>进行切换
 let g:ctrlp_regexp = 0
-" 自定义搜索列表的提示符
+" 自定义搜索列表的提示符,没看出来有啥用...
 let g:ctrlp_line_prefix = '♪ '
 
 " nerdcommenter 设置
+" =============================================================================
+" 注释后默认一个空格
 let g:NERDSpaceDelims=1
 
 " vue代码高亮设置
+" =============================================================================
 au BufRead,BufNewFile *.vue set filetype=vue
 
 " YCM
+" =============================================================================
+" 触发补全提示最少字符数
 let g:ycm_min_num_of_chars_for_completion = 1
+" 提示出现需包含的最小字符数
 let g:ycm_min_num_identifier_candidate_chars = 0
+" 是否查询ultisnips插件进行补全
 let g:ycm_use_ultisnips_completer = 1
+" 在注释中是否展示补全
 let g:ycm_complete_in_comments = 1
+" 在字符串中是否展示补全
 let g:ycm_complete_in_strings = 1
+" 是否从注释和字符串中收集补全字符串
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" 是否根据编写语言添加补全标识到YCM数据库
 let g:ycm_seed_identifiers_with_syntax = 1
+" 是否从tab文件收集补全标识
 let g:ycm_collect_identifiers_from_tags_files = 1
+" 给指定格式文件添加触发补全的语义格式
 let g:ycm_semantic_triggers =  {
   \   'css,less,sass,scss' : ['-', 're!:\s*']
   \ }
+" 一些快捷键
 nnoremap <leader>w :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>wr :YcmCompleter GoToReferences<CR>
 nnoremap <leader>wd :YcmCompleter GetDoc<CR>
 
 " vim-airline
+" =============================================================================
+" 主题
 let g:airline_theme="luna"
-
+" 是否开启tabline扩展配置
 let g:airline#extensions#tabline#enabled = 1
+" 是否展示tabline buffer个数标识
 let g:airline#extensions#tabline#buffer_nr_show = 1
+" 是否展示git分支信息
 let g:airline#extensions#branch#enabled=1
+" 是否展示关闭按钮
 let g:airline#extensions#tabline#show_close_button = 1
+" 关闭按钮图标
 let g:airline#extensions#tabline#close_symbol = 'X'
 
 "设置切换Buffer快捷键"
@@ -186,11 +227,19 @@ nnoremap <C-N> :bn<CR>
 nnoremap <C-P> :bp<CR>
 
 " EasyGrep
+" =============================================================================
+" 搜索模式
 let g:EasyGrepMode = 0     " All:0, Open Buffers:1, TrackExt:2,
+" 设置搜索使用的grep，vimgrep过慢，建议使用电脑自带grep，再安装一个ag，速度很快
 let g:EasyGrepCommand = 1  " Use vimgrep:0, grepprg:1
+" 是否递归查询
 let g:EasyGrepRecursive  = 1 " Recursive searching
+" 是否区分大小写
 let g:EasyGrepIgnoreCase = 1 " not ignorecase:0
+" 排除文件
 let g:EasyGrepFilesToExclude = "*.bak, *~, cscope.*, *.a, *.o, *.pyc, *.bak, **/node_modules/**"
+
+" 设定通过ag查询
 if executable('ag')
   " Use Ag over Grep
   set grepprg=ag\ --nogroup\ --nocolor
